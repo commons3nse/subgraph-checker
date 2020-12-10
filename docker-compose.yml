@@ -1,0 +1,32 @@
+---
+version: "3.8"
+
+services:
+
+  postgres:
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5431:5432"
+    env_file: .env
+    healthcheck:
+      test: "pg_isready -h localhost -p 5432 -q -U postgres"
+      interval: 3s
+      timeout: 5s
+      retries: 5
+
+  subgraph_bot:
+    container_name: subgraph_bot
+    build:
+      context: .
+    command: poetry run python main.py
+    restart: always
+    env_file: .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+    driver: local
