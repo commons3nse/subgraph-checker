@@ -40,7 +40,7 @@ def subscribe(update, context):
         return
 
     if not block:
-        chat.send_message("Subgraph not found. Did you deploy it?")
+        chat.send_message("Subgraph not found. Are you sure you deployed it?")
     else:
         if abs(block - latest) < 3:
             chat.send_message("Your subgraph is already synchronized!")
